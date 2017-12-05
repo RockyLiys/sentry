@@ -28,7 +28,6 @@ class GroupTagValue(Model):
     project_id = BoundedPositiveIntegerField(db_index=True)
     group_id = BoundedPositiveIntegerField(db_index=True)
     environment_id = BoundedPositiveIntegerField(null=True)
-    # times_seen will live in Redis
     key = FlexibleForeignKey('tagstore.TagKey')
     value = FlexibleForeignKey('tagstore.TagValue')
     last_seen = models.DateTimeField(

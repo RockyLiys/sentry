@@ -29,7 +29,6 @@ class GroupTagKey(Model):
     group_id = BoundedPositiveIntegerField(db_index=True)
     environment_id = BoundedPositiveIntegerField(null=True)
     key = FlexibleForeignKey('tagstore.TagKey')
-    # values_seen will be in Redis
 
     objects = BaseManager()
 
