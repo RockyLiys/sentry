@@ -29,6 +29,7 @@ class GroupTagKey(Model):
     group_id = BoundedPositiveIntegerField(db_index=True)
     environment_id = BoundedPositiveIntegerField(null=True)
     key = FlexibleForeignKey('tagstore.TagKey')
+    values_seen = BoundedPositiveIntegerField(default=0)
 
     objects = BaseManager()
 
@@ -39,10 +40,7 @@ class GroupTagKey(Model):
 
     __repr__ = sane_repr('project_id', 'group_id', 'environment_id', 'key')
 
-    # TODO: key property to fetch actual key string?
-
     # TODO: this will have to iterate all of the possible environments a group has?
-    # TODO: values_seen will live in Redis
     def merge_counts(self, new_group):
         from sentry.tagstore.v2.models import GroupTagValue
 

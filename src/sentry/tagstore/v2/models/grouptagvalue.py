@@ -30,6 +30,7 @@ class GroupTagValue(Model):
     environment_id = BoundedPositiveIntegerField(null=True)
     key = FlexibleForeignKey('tagstore.TagKey')
     value = FlexibleForeignKey('tagstore.TagValue')
+    times_seen = BoundedPositiveIntegerField(default=0)
     last_seen = models.DateTimeField(
         default=timezone.now, db_index=True, null=True)
     first_seen = models.DateTimeField(
@@ -45,16 +46,12 @@ class GroupTagValue(Model):
 
     __repr__ = sane_repr('project_id', 'group_id', 'key', 'value')
 
-    # TODO: key property to fetch actual key string?
-    # TODO: value property to fetch actual value string?
-
     def save(self, *args, **kwargs):
         if not self.first_seen:
             self.first_seen = self.last_seen
         super(GroupTagValue, self).save(*args, **kwargs)
 
     # TODO: this will have to iterate all of the possible environments a group has?
-    # TODO: times_seen will live in Redis
     def merge_counts(self, new_group):
         try:
             with transaction.atomic(using=router.db_for_write(GroupTagValue)):

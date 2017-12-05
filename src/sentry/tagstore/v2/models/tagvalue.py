@@ -30,6 +30,7 @@ class TagValue(Model):
     key = FlexibleForeignKey('tagstore.TagKey')
     value = models.CharField(max_length=MAX_TAG_VALUE_LENGTH)
     data = GzippedDictField(blank=True, null=True)
+    times_seen = BoundedPositiveIntegerField(default=0)
     last_seen = models.DateTimeField(
         default=timezone.now, db_index=True, null=True)
     first_seen = models.DateTimeField(
@@ -44,8 +45,6 @@ class TagValue(Model):
         index_together = (('project_id', 'key', 'last_seen'), )
 
     __repr__ = sane_repr('project_id', 'environment_id', 'key', 'value')
-
-    # TODO: key property to fetch actual key string?
 
     def get_label(self):
         from sentry import tagstore
